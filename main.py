@@ -1,16 +1,16 @@
-# This is a sample Python script.
+def main():
+    number1 = int(input("Введите № компа: "))
+    if number1<0:
+        print("invalid input (Отрицательное? Серьезно?)")
+        return
+    m = (number1-1)%5+1
+    result_1 = str(m)
+    result_2 = str(m+5)
+    result_3 = str(m+10)
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+    print( "Задание 1 " + result_1,
+           "Задание 2 " + result_2,
+           "Задание 3 " + result_3 )
 
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    main()

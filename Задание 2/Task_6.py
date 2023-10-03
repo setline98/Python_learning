@@ -3,10 +3,12 @@ def main():
     if number1<0:
         print("invalid input (Расстояние отрицательное? Серьезно?)")
         return
-    inches = number1%12
-    foot = number1//12
-    yard = foot//3
-    mile = yard//1760
+    mile = number1//(1760*3*12)
+    yard = number1%(1760*3*12)
+    foot =yard//(3*12)
+    inches =yard%(3*12)
+
+
 
     print("Миль: "+
           str(mile)+
@@ -15,7 +17,8 @@ def main():
           " Футов: "+
           str(foot)+
           " Дюймов: "+
-          str(inches))
+          str(inches)
+          )
 
 if __name__ == '__main__':
     main()
