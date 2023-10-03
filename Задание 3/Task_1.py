@@ -34,7 +34,7 @@ def main():
     aboba[1] = "никогда не"
     task12 = ' '.join(aboba)
     task13 = stringa + " на Python"
-    task14 = words[len(words)-1]+stringa
+    task14 = words[len(words)-1]+" "+stringa
     task15 = len(stringa)
 
     print(
