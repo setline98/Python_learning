@@ -1,10 +1,8 @@
 def main():
     number1 = int(input("Введите число m: "))
-    if number1 < 0:
-        print("invalid input (Отрицательное число? Серьезно?)")
-        return
+
     number2 = int(input("Введите число n: "))
-    if number2<0:
+    if number2==0:
         print("invalid input (Отрицательное число? Серьезно?)")
         return
 

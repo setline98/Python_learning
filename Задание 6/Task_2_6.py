@@ -1,5 +1,5 @@
 def main():
-    Listik_1 = tuple(range(1,5,1))
+    Listik_1 = tuple(range(1,6,1))
     Listik_2 = ('Титов','Косолапов','Никаноров','Лаврентьев','Мордеева')
 
     print(Listik_1)

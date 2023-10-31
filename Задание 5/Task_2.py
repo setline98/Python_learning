@@ -14,7 +14,7 @@ def main():
 
 
 
-    if a+b >= c and b+c >= a and a+c >= b and a != b != c:
+    if a+b >= c and b+c >= a and a+c >= b:
         print("Треугльник существует")
     else:
         print("Треугльник не существует")

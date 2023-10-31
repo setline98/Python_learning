@@ -5,7 +5,7 @@ def main():
 
     school_class = str(input('Введите класс: '))
     if school_class in school:
-        print('В классе', school_class, school[school_class], 'человек')
+        print('В классе', school_class, school[school_class], 'чел.')
     else: print('Такого класса не существует')
 
     school['1а'] = 32
