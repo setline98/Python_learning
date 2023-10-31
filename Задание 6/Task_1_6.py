@@ -8,7 +8,7 @@ def main():
     print(Listik_1[2])
 
 
-    Listik_2[10] = 200
+    Listik_2[-1] = 200
     print(Listik_2)
 
     Listik_result = Listik_1 + Listik_2
