@@ -1,9 +1,10 @@
 def main():
-    input_number = int(input("Введите № компа: "))
-    if input_number<0:
+   #5 комп
+    number1 = int(input("Введите № компа: "))
+    if number1<0:
         print("invalid input (Отрицательное? Серьезно?)")
         return
-    m = (input_number-1)%5+1
+    m = (number1-1)%5+1
     result_1 = str(m)
     result_2 = str(m+5)
     result_3 = str(m+10)
