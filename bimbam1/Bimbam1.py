@@ -1,0 +1,16 @@
+byte = "###1#001"
+b1 = bool((int(byte[3]) + int(byte[5]) + int(byte[7]))%2)
+b2 = bool((int(byte[3]) + int(byte[6]) + int(byte[7]))%2)
+b4 = bool((int(byte[5]) + int(byte[6]) + int(byte[7]))%2)
+b0 = bool((int(b1)+int(b2)+int(byte[3]) + int(b4) + int(byte[5]) + int(byte[6]) + int(byte[7]))%2)
+byte_list = list(byte)
+byte_list[0] = str(int(b0))
+byte_list[1] = str(int(b1))
+byte_list[2] = str(int(b2))
+byte_list[4] = str(int(b4))
+print(b1)
+print(b2)
+print(b4)
+print(b0)
+
+print ("ответ: "+ "".join(byte_list))
