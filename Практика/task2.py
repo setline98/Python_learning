@@ -1,4 +1,5 @@
 # task2.py
+# Выяснить где находится сечение и сопоставить с фазовым портретом. Сечение сделать поверх фазового портрета в 3д в идеале
 import numpy as np
 import matplotlib
 matplotlib.use('TkAgg')
@@ -18,7 +19,7 @@ def main():
         k4 = f(t + h, y + h * k3)
         return y + (h / 6.0) * (k1 + 2*k2 + 2*k3 + k4)
 
-    # Простой шаг Эйлера (написан здесь с нуля)
+    # Простой шаг Эйлера
     def euler_step(f, t, y, h):
         return y + h * f(t, y)
 
