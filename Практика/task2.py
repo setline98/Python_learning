@@ -1,74 +1,47 @@
 # task2.py
-# Выяснить где находится сечение и сопоставить с фазовым портретом. Сечение сделать поверх фазового портрета в 3д в идеале
-import numpy as np
-import matplotlib
+
+import numpy as np, matplotlib.pyplot as plt, matplotlib
 matplotlib.use('TkAgg')
-import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D  # noqa: F401
+
+σ, r, b = 10., 28., 8/3
+def f(state): x,y,z=state; return np.array([σ*(y-x), x*(r-z)-y, x*y-b*z])
+def rk4(y,h): k1=f(y); k2=f(y+.5*h*k1); k3=f(y+.5*h*k2); k4=f(y+h*k3); return y+h*(k1+2*k2+2*k3+k4)/6
+
+def integrate(y0, h=0.01, T=50):
+    n=int(T/h); y=y0.copy(); traj=[y.copy()]
+    for _ in range(n): y=rk4(y,h); traj.append(y.copy())
+    return np.array(traj)
 
 def main():
-    sigma, r, b = 10.0, 28.0, 8.0/3.0
+    traj = integrate(np.array([1.,1.,1.]))
+    x,y,z = traj.T; t=np.linspace(0,50, len(traj))
+    level=27.
+    xs,ys = [],[]
+    for k in range(len(z)-1):
+        if z[k]>level and z[k+1]<level:
+            α=(z[k]-level)/(z[k]-z[k+1])
+            xs.append(x[k]+α*(x[k+1]-x[k])); ys.append(y[k]+α*(y[k+1]-y[k]))
 
-    def lorenz(t, state):
-        x, y, z = state
-        return np.array([sigma*(y - x), x*(r - z) - y, x*y - b*z], dtype=float)
+    fig = plt.figure(figsize=(12,8))
+    gs = fig.add_gridspec(2,2)
 
-    def rk4_step(f, t, y, h):
-        k1 = f(t, y)
-        k2 = f(t + 0.5 * h, y + 0.5 * h * k1)
-        k3 = f(t + 0.5 * h, y + 0.5 * h * k2)
-        k4 = f(t + h, y + h * k3)
-        return y + (h / 6.0) * (k1 + 2*k2 + 2*k3 + k4)
+    ax1 = fig.add_subplot(gs[0,0])
+    ax1.plot(t,x); ax1.set(title='x(t)', xlabel='t', ylabel='x'); ax1.grid()
 
-    # Простой шаг Эйлера
-    def euler_step(f, t, y, h):
-        return y + h * f(t, y)
+    ax2 = fig.add_subplot(gs[0,1])
+    ax2.plot(x,z,lw=.5); ax2.set(title='Фазовый портрет x-z', xlabel='x', ylabel='z'); ax2.grid()
 
-    def integrate(step_func, y0, h, T):
-        steps = int(T / h)
-        t = 0.0
-        y = np.array(y0, float)
-        traj = [y.copy()]
-        for _ in range(steps):
-            y = step_func(lorenz, t, y, h)
-            traj.append(y.copy())
-            t += h
-            if np.any(np.abs(y) > 1e6):
-                break
-        return np.vstack(traj)
+    ax3d = fig.add_subplot(gs[1,1], projection='3d')
+    ax3d.plot(x,y,z,lw=.5,color='blue')
+    ax3d.scatter(xs,ys,np.full_like(xs,level),s=8,color='red')
+    ax3d.set(title='3-D + сечение Пуанкаре', xlabel='x', ylabel='y', zlabel='z')
 
-    y0 = [1.0, 1.0, 1.0]
-    T = 50.0
+    ax4 = fig.add_subplot(gs[1,0])
+    ax4.scatter(xs,ys,s=8,color='red'); ax4.set(title=f'Сечение z={level}', xlabel='x', ylabel='y'); ax4.grid()
 
-    traj_rk = integrate(rk4_step, y0, 0.01, T)
-    traj_e1 = integrate(euler_step, y0, 0.01, T)
-    traj_e2 = integrate(euler_step, y0, 0.05, T)
-    traj_e3 = integrate(euler_step, y0, 0.1, T)
+    plt.tight_layout(); plt.show()
 
-    def last(arr): return arr[-1] if len(arr) else np.array([np.nan]*3)
-    print('Конечные состояния (T=50):')
-    print('  RK4  h=0.01:', last(traj_rk))
-    print('  Euler h=0.01:', last(traj_e1))
-    print('  Euler h=0.05:', last(traj_e2))
-    if len(traj_e3) < int(T/0.1):
-        print('  Euler h=0.10: решение разошлось')
-    else:
-        print('  Euler h=0.10:', last(traj_e3))
-
-    x, y, z = traj_rk.T
-    t_arr = np.linspace(0, T, len(traj_rk))
-    plt.figure(figsize=(8,4)); plt.plot(t_arr, x); plt.title('x(t) (RK4)'); plt.grid(True); plt.tight_layout(); plt.show()
-
-    plt.figure(figsize=(6,5)); plt.plot(x, z, lw=0.5); plt.title('Фазовый портрет (x‑z)'); plt.xlabel('x'); plt.ylabel('z'); plt.grid(True); plt.tight_layout(); plt.show()
-
-    level = 27.0
-    xs, ys = [], []
-    for k in range(len(z) - 1):
-        if z[k] > level and z[k+1] < level:
-            frac = (z[k] - level) / (z[k] - z[k+1])
-            xs.append(x[k] + frac*(x[k+1] - x[k]))
-            ys.append(y[k] + frac*(y[k+1] - y[k]))
-    plt.figure(figsize=(5,5)); plt.scatter(xs, ys, s=8); plt.title(f'Сечение Пуанкаре (z={level})')
-    plt.xlabel('x'); plt.ylabel('y'); plt.grid(True); plt.tight_layout(); plt.show()
-
-if __name__ == '__main__':
+if __name__=='__main__':
     main()
+
